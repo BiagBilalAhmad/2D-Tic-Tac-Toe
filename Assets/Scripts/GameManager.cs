@@ -10,6 +10,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private RectTransform currentPlayerHighLight;
     [SerializeField] private bool testingIDs;
 
+    public int coins;
+
+    public bool hasPowerup;
+
     [System.Serializable]
     public class Player_Testing
     {
@@ -165,6 +169,22 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         Instance = this;
+
+        coins = PlayerPrefs.GetInt("Coins", 0);
+        int power = PlayerPrefs.GetInt("Powerup", 0);
+        hasPowerup = power == 1 ? true : false;
+
+        if (!hasPowerup)
+        {
+            player[0].medium = 0;
+            player[0].large = 0;
+            player[0].remover = 0;
+
+            player[1].medium = 0;
+            player[1].large = 0;
+            player[1].remover = 0;
+        }
+
         StartNewGame();
     }
 
@@ -188,8 +208,8 @@ public class GameManager : MonoBehaviour
 
         if (testingIDs)
         {
-            UpdatePlayer(true, playerTesting[0].name, playerTesting[0].motto, playerTesting[0].point, playerTesting[0].medium, playerTesting[0].large, playerTesting[0].remover);
-            UpdatePlayer(false, playerTesting[1].name, playerTesting[1].motto, playerTesting[1].point, playerTesting[1].medium, playerTesting[1].large, playerTesting[1].remover);
+            UpdatePlayer(true, player[0].name, player[0].motto, player[0].point, player[0].medium, player[0].large, player[0].remover);
+            UpdatePlayer(false, player[1].name, player[1].motto, player[1].point, player[1].medium, player[1].large, player[1].remover);
         }
         else
         {
@@ -290,6 +310,8 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            coins += UnityEngine.Random.Range(100, 150);
+            PlayerPrefs.SetInt("Coins", coins);
             winText.text = "Player " + winner.ToString() + " Wins!";
         }
     }
