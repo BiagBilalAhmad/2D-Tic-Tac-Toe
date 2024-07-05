@@ -12,7 +12,10 @@ public class GameManager : MonoBehaviour
 
     public int coins;
 
+    [Header("Powerups")]
     public bool hasPowerup;
+
+    public int large, medium, remover;
 
     [System.Serializable]
     public class Player_Testing
@@ -47,7 +50,8 @@ public class GameManager : MonoBehaviour
 
     public TextMeshProUGUI winText;
     public GameObject restartButton;
-    public Action GameplayRestarted;
+    public GameObject resumeButton;
+    public event Action GameplayRestarted;
 
     private Player[,] grid = new Player[3, 3];
     private Player currentPlayer = Player.Circle;
@@ -174,6 +178,10 @@ public class GameManager : MonoBehaviour
         int power = PlayerPrefs.GetInt("Powerup", 0);
         hasPowerup = power == 1 ? true : false;
 
+        large = PlayerPrefs.GetInt("LargePowerup", 0);
+        medium = PlayerPrefs.GetInt("MediumPowerup", 0);
+        remover = PlayerPrefs.GetInt("RemoverPowerup", 0);
+
         if (!hasPowerup)
         {
             player[0].medium = 0;
@@ -183,6 +191,17 @@ public class GameManager : MonoBehaviour
             player[1].medium = 0;
             player[1].large = 0;
             player[1].remover = 0;
+        }
+
+        if (hasPowerup)
+        {
+            player[0].medium = medium;
+            player[0].large = large;
+            player[0].remover = remover;
+
+            player[1].medium = medium;
+            player[1].large = large;
+            player[1].remover = remover;
         }
 
         StartNewGame();
@@ -197,14 +216,16 @@ public class GameManager : MonoBehaviour
     {
         if(GameplayRestarted != null)
         {
-            GameplayRestarted();
+            Debug.Log("Game Restarted!");
+            GameplayRestarted.Invoke();
         }
-
+            
         currentPlayer = Player.Circle; // Circle starts first
 
         UpdateCurrentPlayerText();
         winText.gameObject.SetActive(false);
         restartButton.SetActive(false);
+        resumeButton.SetActive(false);
 
         if (testingIDs)
         {
@@ -217,6 +238,12 @@ public class GameManager : MonoBehaviour
         }
 
         ClearGrid();
+    }
+
+    public void CallGameRestarted()
+    {
+        Debug.Log("Game Restarted!");
+        GameplayRestarted.Invoke();
     }
 
     public void PlaceMark(int row, int col)

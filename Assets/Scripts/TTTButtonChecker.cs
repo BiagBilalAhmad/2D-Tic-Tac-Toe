@@ -23,7 +23,8 @@ public class TTTButtonChecker : MonoBehaviour
     }
     private void OnDisable()
     {
-        GameManager.Instance.GameplayRestarted -= ButtonReset;
+        if (GameManager.Instance != null)
+            GameManager.Instance.GameplayRestarted -= ButtonReset;
     }
 
     public void ButtonCheckCross()

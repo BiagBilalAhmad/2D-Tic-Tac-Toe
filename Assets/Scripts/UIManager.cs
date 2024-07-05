@@ -28,6 +28,9 @@ public class UIManager : MonoBehaviour
     [Header("Settings")]
     public RectTransform SettingsPanel;
 
+    [Header("Game")]
+    public GameObject GamePanel;
+
     [Header("Game Selection Screen")]
     public GameObject GameSelectionScreen;
     [SerializeField] private RectTransform TopBtns;
@@ -219,7 +222,10 @@ public class UIManager : MonoBehaviour
 
     public void PlayerVsPlayer()
     {
-        ShowPanel(panels[1]);
+        //ShowPanel(panels[1]);
+        SoundManager.Instacne.PlayPopEffect();
+        GamePanel.SetActive(true);
+        GamePanel.transform.DOScale(1, .3f).SetEase(Ease.OutBack).SetUpdate(false);
     }
 
     public void PlayerVsCOM()

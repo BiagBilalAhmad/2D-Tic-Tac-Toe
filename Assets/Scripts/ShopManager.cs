@@ -6,45 +6,94 @@ public class ShopManager : MonoBehaviour
 {
     public TMP_Text coinTxt;
 
-    public Button checkPowerup;
-    public Button crossPowerup;
+    public Button largePowerup;
+    public Button mediumPowerup;
+    public Button removerPowerup;
 
     public int coins;
-    public bool canBuyMore;
+
+    public int large, medium, remover;
 
     void Start()
     {
         coins = 2000; // PlayerPrefs.GetInt("Coins", 0);
         coinTxt.text = coins.ToString();
 
-        int power = PlayerPrefs.GetInt("Powerup", 0);
-        canBuyMore = power == 0 ? true : false;
+        large = PlayerPrefs.GetInt("LargePowerup", 0);
+        medium = PlayerPrefs.GetInt("MediumPowerup", 0);
+        remover = PlayerPrefs.GetInt("RemoverPowerup", 0);
+        ToggleButtonsIntractable();
+    }
 
-        if (coins < 300 || !canBuyMore)
+    private void ToggleButtonsIntractable()
+    {
+        if (coins < 300)
         {
-            checkPowerup.interactable = false;
-            crossPowerup.interactable = false;
+            largePowerup.interactable = false;
+        }
+
+        if (coins < 200)
+        {
+            mediumPowerup.interactable = false;
+        }
+
+        if (coins < 300)
+        {
+            removerPowerup.interactable = false;
         }
     }
 
-    public void BuyCheckPowerup()
+    public void BuyLargePowerup()
     {
-        if (coins >= 300 && canBuyMore)
+        if (coins >= 300)
         {
             coins -= 300;
             coinTxt.text = coins.ToString();
 
             PlayerPrefs.SetInt("Coins", coins);
 
+            large++;
+            PlayerPrefs.SetInt("LargePowerup", large);
+
             PlayerPrefs.SetInt("Powerup", 1);
-
-            canBuyMore = false;
         }
 
-        if (coins < 300 || !canBuyMore)
+        ToggleButtonsIntractable();
+    }
+
+    public void BuyMediumPowerup()
+    {
+        if (coins >= 200)
         {
-            checkPowerup.interactable = false;
-            crossPowerup.interactable = false;
+            coins -= 200;
+            coinTxt.text = coins.ToString();
+
+            PlayerPrefs.SetInt("Coins", coins);
+
+            medium++;
+            PlayerPrefs.SetInt("MediumPowerup", large);
+
+            PlayerPrefs.SetInt("Powerup", 1);
         }
+
+        ToggleButtonsIntractable();
+    }
+
+    public void BuyRemoverPowerup()
+    {
+        if (coins >= 300)
+        {
+            coins -= 300;
+            coinTxt.text = coins.ToString();
+
+            PlayerPrefs.SetInt("Coins", coins);
+
+            remover++;
+            PlayerPrefs.SetInt("RemoverPowerup", large);
+
+            PlayerPrefs.SetInt("Powerup", 1);
+        }
+
+        ToggleButtonsIntractable();
     }
 }
