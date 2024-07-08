@@ -21,6 +21,23 @@ public class GamePlayUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI largeAvailable2;
     [SerializeField] private TextMeshProUGUI removerAvailable2;
 
+    [Space()]
+    public GameObject Grid;
+    private TTTButtonChecker[] tButtons;
+
+    private void Start()
+    {
+        tButtons = Grid.GetComponentsInChildren<TTTButtonChecker>();
+    }
+
+    public void ResetGridButtons()
+    {
+        foreach (var button in tButtons)
+        {
+            button.ButtonReset();
+        }
+    }
+
     public void UpdatePoints1(string name, string motto, string point)
     {
         points.text = point;

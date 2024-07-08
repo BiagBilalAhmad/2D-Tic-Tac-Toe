@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -126,6 +127,7 @@ public class GameManager : MonoBehaviour
             default: return true;
         }
     }
+
     public void ReduceMove(int size)
     {
         int i = 0;
@@ -158,6 +160,24 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public List<int> GetMoves()
+    {
+        int i = 0;
+
+        if (!GetCurrentPlayer())
+        {
+            i = 1;
+        }
+
+        List<int> playerMoves = new List<int>();
+        playerMoves.Clear();
+        playerMoves.Add(player[i].medium);
+        playerMoves.Add(player[i].large);
+        playerMoves.Add(player[i].remover);
+
+        return playerMoves;
+    }
+
     private void UpdateGameUI(bool player1)
     {
         if(player1)
@@ -174,36 +194,6 @@ public class GameManager : MonoBehaviour
     {
         Instance = this;
 
-        coins = PlayerPrefs.GetInt("Coins", 0);
-        int power = PlayerPrefs.GetInt("Powerup", 0);
-        hasPowerup = power == 1 ? true : false;
-
-        large = PlayerPrefs.GetInt("LargePowerup", 0);
-        medium = PlayerPrefs.GetInt("MediumPowerup", 0);
-        remover = PlayerPrefs.GetInt("RemoverPowerup", 0);
-
-        if (!hasPowerup)
-        {
-            player[0].medium = 0;
-            player[0].large = 0;
-            player[0].remover = 0;
-
-            player[1].medium = 0;
-            player[1].large = 0;
-            player[1].remover = 0;
-        }
-
-        if (hasPowerup)
-        {
-            player[0].medium = medium;
-            player[0].large = large;
-            player[0].remover = remover;
-
-            player[1].medium = medium;
-            player[1].large = large;
-            player[1].remover = remover;
-        }
-
         StartNewGame();
     }
 
@@ -219,7 +209,38 @@ public class GameManager : MonoBehaviour
             Debug.Log("Game Restarted!");
             GameplayRestarted.Invoke();
         }
-            
+
+        coins = PlayerPrefs.GetInt("Coins", 0);
+
+        //int power = PlayerPrefs.GetInt("Powerup", 0);
+        //hasPowerup = power == 1 ? true : false;
+
+        //large = PlayerPrefs.GetInt("LargePowerup", 0);
+        //medium = PlayerPrefs.GetInt("MediumPowerup", 0);
+        //remover = PlayerPrefs.GetInt("RemoverPowerup", 0);
+
+        //if (!hasPowerup)
+        //{
+        //    player[0].medium = 0;
+        //    player[0].large = 0;
+        //    player[0].remover = 0;
+
+        //    player[1].medium = 0;
+        //    player[1].large = 0;
+        //    player[1].remover = 0;
+        //}
+
+        //if (hasPowerup)
+        //{
+        //    player[0].medium = medium;
+        //    player[0].large = large;
+        //    player[0].remover = remover;
+
+        //    player[1].medium = medium;
+        //    player[1].large = large;
+        //    player[1].remover = remover;
+        //}
+
         currentPlayer = Player.Circle; // Circle starts first
 
         UpdateCurrentPlayerText();
